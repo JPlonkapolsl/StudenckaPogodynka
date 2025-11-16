@@ -51,7 +51,7 @@
     <h2>Studencka Pogodynka</h2>
 
     <div class="dane-pogodowe">
-        <p>Temperatura: <span id="temp">12</span> °C</p>
+        <p>Temperatura: <span id="temp">--</span> °C</p>
         <p>Wilgotność: <span id="wilg">--</span> %</p>
         <p>Ostatnia aktualizacja: <span id="czas">--</span></p>
     </div>
@@ -59,8 +59,10 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
 
     <script>
+        // Konfiguracja Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyALS8o3IVNncECTjXpTzycffDcfaf7NfGE",
             authDomain: "stacjapogodowa-da581.firebaseapp.com",
@@ -72,6 +74,7 @@
             measurementId: "G-2XSHLG63D8"
         };
 
+        // Inicjalizacja Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -79,16 +82,30 @@
         const wilgEl = document.getElementById("wilg");
         const czasEl = document.getElementById("czas");
 
-        db.ref("dane/").on("value", snapshot => {
-            const data = snapshot.val();
-            if(data){
-                tempEl.innerText = data.temp;
-                wilgEl.innerText = data.wilg;
-                czasEl.innerText = data.czas;
-            }
-        });
+        // Logowanie do Firebase (wpisz swoje dane)
+        const EMAIL = "TWÓJ_EMAIL";       // <-- Twój email w Authentication
+        const PASSWORD = "TWOJE_HASŁO";  // <-- Twoje hasło
+
+        firebase.auth().signInWithEmailAndPassword(EMAIL, PASSWORD)
+            .then((userCredential) => {
+                console.log("Zalogowano:", userCredential.user);
+
+                // Odczyt danych z bazy w czasie rzeczywistym
+                db.ref("dane/").on("value", snapshot => {
+                    const data = snapshot.val();
+                    if(data){
+                        tempEl.innerText = data.temp;
+                        wilgEl.innerText = data.wilg;
+                        czasEl.innerText = data.czas;
+                    }
+                });
+
+            })
+            .catch((error) => {
+                console.error("Błąd logowania:", error);
+                alert("Nie udało się zalogować do Firebase. Sprawdź email i hasło.");
+            });
     </script>
 
 </body>
 </html>
-
