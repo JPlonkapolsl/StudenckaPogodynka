@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Stacja pogodowa</title>
+</head>
+<body>
+
+    <h2>Dane pogodowe</h2>
+    <p>Temperatura: <span id="temp">--</span> °C</p>
+    <p>Wilgotność: <span id="wilg">--</span> %</span></p>
+    <p>Ostatnia aktualizacja: <span id="czas">--</span></p>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
+
+    <script>
+        // Konfiguracja Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyALS8o3IVNncECTjXpTzycffDcfaf7NfGE",
+            authDomain: "stacjapogodowa-da581.firebaseapp.com",
+            databaseURL: "https://stacjapogodowa-da581-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "stacjapogodowa-da581",
+            storageBucket: "stacjapogodowa-da581.firebasestorage.app",
+            messagingSenderId: "324270359868",
+            appId: "1:324270359868:web:56edd50a77716639250a39",
+            measurementId: "G-2XSHLG63D8"
+        };
+
+        // Inicjalizacja
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // HTML
+        const tempEl = document.getElementById("temp");
+        const wilgEl = document.getElementById("wilg");
+        const czasEl = document.getElementById("czas");
+
+        // Pobieranie danych w czasie rzeczywistym
+        db.ref("dane/").on("value", snapshot => {
+            const data = snapshot.val();
+            if(data){
+                tempEl.innerText = data.temp;
+                wilgEl.innerText = data.wilg;
+                czasEl.innerText = data.czas;
+            }
+        });
+    </script>
+
+</body>
+</html>
