@@ -2,21 +2,65 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Stacja pogodowa</title>
+    <title>Studencka Pogodynka</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #0077cc;
+            margin-bottom: 20px;
+        }
+
+        .dane-pogodowe {
+            display: inline-block;
+            background: #ffffff;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dane-pogodowe p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        #temp {
+            color: #ff4500;
+            font-weight: bold;
+        }
+
+        #wilg {
+            color: #1e90ff;
+            font-weight: bold;
+        }
+
+        #czas {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Dane pogodowe</h2>
-    <p>Temperatura: <span id="temp">--</span> °C</p>
-    <p>Wilgotność: <span id="wilg">--</span> %</span></p>
-    <p>Ostatnia aktualizacja: <span id="czas">--</span></p>
+    <h2>Studencka Pogodynka</h2>
+
+    <div class="dane-pogodowe">
+        <p>Temperatura: <span id="temp">--</span> °C</p>
+        <p>Wilgotność: <span id="wilg">--</span> %</p>
+        <p>Ostatnia aktualizacja: <span id="czas">--</span></p>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
 
     <script>
-        // Konfiguracja Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyALS8o3IVNncECTjXpTzycffDcfaf7NfGE",
             authDomain: "stacjapogodowa-da581.firebaseapp.com",
@@ -28,16 +72,13 @@
             measurementId: "G-2XSHLG63D8"
         };
 
-        // Inicjalizacja
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // HTML
         const tempEl = document.getElementById("temp");
         const wilgEl = document.getElementById("wilg");
         const czasEl = document.getElementById("czas");
 
-        // Pobieranie danych w czasie rzeczywistym
         db.ref("dane/").on("value", snapshot => {
             const data = snapshot.val();
             if(data){
@@ -50,4 +91,3 @@
 
 </body>
 </html>
-
